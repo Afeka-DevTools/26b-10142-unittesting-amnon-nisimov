@@ -146,6 +146,10 @@ public class App {
         return evens;
     }
 
+    public static String getGreeting(){
+        return "hello";
+    }
+
     /**
      * Finds the most common word in a given text.
      *
@@ -153,6 +157,7 @@ public class App {
      * @return the most common word in the text
      */
     public static String mostCommonWord(String text) {
+        if(text.isBlank())return "";
         String[] words = text.toLowerCase().split("\\W+");
         Map<String, Integer> count = new HashMap<>();
         for (String word : words) {

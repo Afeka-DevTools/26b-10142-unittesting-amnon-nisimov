@@ -3,12 +3,281 @@
  */
 package org.example;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
     @Test void appHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
+
+    // ==========================================
+    // 1. בדיקת מתודה שמחזירה בוליאני (אמת/שקר)
+    // המתודה הנבדקת: isPrime
+    // ==========================================
+    
+    @Test
+    public void testIsPrime_ValidPrimes_ReturnsTrue() {
+        // Assert - שימוש בפונקציה ייעודית שמוודאת שהתוצאה היא True
+        assertTrue(App.isPrime(7), "7 should be prime");
+        assertTrue(App.isPrime(2), "2 is the smallest prime");
+    }
+
+    @Test
+    public void testIsPrime_NonPrimes_ReturnsFalse() {
+        // נוודא שמספרים לא ראשוניים, כולל מקרי קצה, מחזירים False
+        assertFalse(App.isPrime(4), "4 is not prime");
+        assertFalse(App.isPrime(1), "1 is not prime");
+        assertFalse(App.isPrime(-5), "Negative numbers are not prime");
+    }
+
+    // ==========================================
+    // 2. בדיקת שגיאות (Exceptions)
+    // המתודה הנבדקת: factorial
+    // ==========================================
+
+    @Test
+    public void testFactorial_PositiveNumber_ReturnsCorrectResult() {
+        assertEquals(120, App.factorial(5), "5! should equal 120");
+        assertEquals(1, App.factorial(0), "0! should equal 1"); // מקרה קצה מתמטי
+    }
+
+    @Test
+    public void testFactorial_NegativeNumber_ThrowsException() {
+        // כשמכניסים מספר שלילי, אנחנו מצפים שהקוד יזרוק שגיאה ולא יקרוס סתם.
+        // הפונקציה assertThrows בודקת בדיוק את זה.
+        assertThrows(IllegalArgumentException.class, () -> {
+            App.factorial(-1); // הפעולה שאמורה לגרום לשגיאה
+        }, "Should throw IllegalArgumentException for negative input");
+    }
+
+    // ==========================================
+    // 3. בדיקת רשימות (Collections)
+    // המתודה הנבדקת: filterEvens
+    // ==========================================
+
+    @Test
+    public void testFilterEvens_MixedList_ReturnsOnlyEvens() {
+        // Arrange - הכנת הנתונים
+        List<Integer> input = Arrays.asList(1, 2, 3, 4, 5, 6);
+        List<Integer> expected = Arrays.asList(2, 4, 6);
+
+        // Act - הפעלת המתודה
+        List<Integer> actual = App.filterEvens(input);
+
+        // Assert - השוואה בין רשימות (JUnit יודע להשוות את התוכן של הרשימה)
+        assertEquals(expected, actual, "The list should contain only even numbers");
+    }
+
+    @Test
+    public void testAdd(){
+        //Arrange
+        int a = 5;
+        int b = 4;
+        int c = -1;
+        //Act
+        int temp = App.add(a, b);
+        int temp1 = App.add(a, c);
+        //Assert
+        assertEquals(9, temp, "Should return 9");
+        assertEquals(4, temp1, "Should return 4");
+    }
+
+    @Test
+    public void testReverse(){
+        //Arrange
+        String a = "kaki";
+        String b = "c";
+        String c = "";
+        //Act
+        String revA = App.reverse(a);
+        String revB = App.reverse(b);
+        String revC = App.reverse(c);
+        //Assert
+        assertEquals("ikak",revA);
+        assertEquals("c",revB);
+        assertEquals("",revC);
+    }
+
+    @Test
+    public void testIsPalindrome(){
+        //Arrange
+        String a = "aba";
+        String b = "ima";
+        String c = "c";
+        String d = "";
+        //Act
+        boolean isA = App.isPalindrome(a);
+        boolean isB = App.isPalindrome(b);
+        boolean isC = App.isPalindrome(c);
+        boolean isD = App.isPalindrome(d);
+        //Assert
+        assertTrue(isA);
+        assertFalse(isB);
+        assertTrue(isC);
+        assertTrue(isD);
+    }
+
+    @Test
+    public void testFibonacciUpTo_ValidPositiveNumber_ReturnsCorrectList(){
+        // בדיקה של מספר רגיל
+        List<Integer> expected = Arrays.asList(0, 1, 1, 2, 3, 5, 8, 13);
+        List<Integer> actual = App.fibonacciUpTo(20);
+        assertEquals(expected, actual, "Should return Fibonacci sequence up to 20");
+    }
+
+    @Test
+    public void testFibonacciUpTo_Zero_ReturnsOnlyZero(){
+        // בדיקת מקרה קצה - אפס
+        List<Integer> expected = Arrays.asList(0);
+        List<Integer> actual = App.fibonacciUpTo(0);
+        assertEquals(expected, actual, "Should return list with only 0");
+    }
+
+    @Test
+    public void testFibonacciUpTo_NegativeNumber_ThrowsException(){
+        // בדיקת שגיאה (Exception)
+        assertThrows(IllegalArgumentException.class, () -> {
+            App.fibonacciUpTo(-5);
+        }, "Should throw an exception for negative numbers");
+    }
+
+    @Test
+    public void testCharFrequency_NormalWord_ReturnsCorrectCounts() {
+        // Arrange
+        String input = "hello";
+        
+        // יצירת התוצאה המצופה: מילון שבו 'l' שווה 2, והשאר 1
+        Map<Character, Integer> expected = Map.of(
+            'h', 1,
+            'e', 1,
+            'l', 2,
+            'o', 1
+        );
+
+        // Act
+        Map<Character, Integer> actual = App.charFrequency(input);
+
+        // Assert
+        assertEquals(expected, actual, "Should correctly count occurrences of each character");
+    }
+
+    @Test
+    public void testCharFrequency_WordWithLowerAndCapital_ReturnsCorrectCounts() {
+        // Arrange
+        String input = "Wow,yEsy";
+        
+        // יצירת התוצאה המצופה: מילון שבו 'l' שווה 2, והשאר 1
+        Map<Character, Integer> expected = Map.of(
+            'W', 1,
+            'o', 1,
+            'w', 1,
+            ',', 1,
+            'y', 2,
+            'E', 1,
+            's', 1
+        );
+
+        // Act
+        Map<Character, Integer> actual = App.charFrequency(input);
+
+        // Assert
+        assertEquals(expected, actual, "Should correctly count occurrences of each character");
+    }
+
+
+    @Test
+    public void testCharFrequency_EmptyString_ReturnsEmptyMap() {
+        // Arrange
+        String input = "";
+        Map<Character, Integer> expected = Map.of(
+            
+        );
+
+        // Act
+        Map<Character, Integer> actual = App.charFrequency(input);
+
+        // Assert
+        assertEquals(expected, actual, "Should return empty map");
+    }
+
+    @Test
+    public void testIsAnagram(){
+        //Arrange
+        String a = "evil";
+        String b = "veil";
+        String c = "";
+        String d = "sdvw";
+        String e = "Debit Card";
+        String f = "Bad credit";
+        //Act
+        boolean isAb = App.isAnagram(a, b);
+        boolean isAc = App.isAnagram(a, c);
+        boolean isAd = App.isAnagram(a, d);
+        boolean isBd = App.isAnagram(b, d);
+        boolean isCd = App.isAnagram(c, d);
+        boolean isEf = App.isAnagram(e, f);
+
+
+        //Assert
+        assertTrue(isAb);
+        assertFalse(isAc);
+        assertFalse(isAd);
+        assertFalse(isBd);
+        assertFalse(isCd);
+        assertTrue(isEf);
+    }
+
+    @Test
+    public void testAvarage_EmptyArray(){
+        
+        assertThrows(IllegalArgumentException.class, () -> {App.average(new int[0]);});
+
+        
+    }
+    @Test
+    public void testAvarage(){
+        //Arrange
+        int[] a = {1,5,7,5,6,-1,71,2};
+
+        //Act
+        double avg = App.average(a);
+        //Assert
+        assertEquals(12.0, avg);
+    }
+    
+    @Test
+    public void testFilterEvens(){
+        //Arrange
+        List<Integer> a = Arrays.asList(1,4,5,3,8,7);
+        //Act
+        List<Integer> evenA = App.filterEvens(a);
+        //Assert
+        assertEquals(Arrays.asList(4,8), evenA);
+    }
+
+    @Test
+    public void testMostCommonWord(){
+        //Arrange
+        String a = "hello hi hi kaki";
+        String b = "   ";
+        //Act
+        String mostA = App.mostCommonWord(a);
+        String mostB = App.mostCommonWord(b);
+        //Assert
+        assertEquals("hi", mostA);
+        assertEquals("", mostB);
+
+    }
+
 }
